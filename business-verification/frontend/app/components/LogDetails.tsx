@@ -9,6 +9,7 @@ import {
   YoutubeIcon,
   MapIcon,
   LinkedinIcon,
+  Star,
 } from "lucide-react";
 import { Log } from "./Dashboard";
 
@@ -23,33 +24,26 @@ export function LogDetails({ selectedLog }: LogDetailsProps) {
     <div className="flex-1 p-6">
       <div className="grid gap-6">
         <div className="grid gap-2">
-          <div className="text-2xl font-bold">
-            <MessageCircleIcon className="h-6 w-6 mr-2" />
-            {selectedLog.business_name}
-          </div>
-          <div className="text-muted-foreground">
+          <div className="text-2xl font-bold">{selectedLog.business_name}</div>
+          <div className="flex items-center text-muted-foreground">
             <CalendarIcon className="h-4 w-4 mr-2" />
-            {selectedLog.created_at}
+            <span>{selectedLog.created_at}</span>
           </div>
         </div>
         <Separator />
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <div className="text-lg font-medium">
+            <div className="text-lg font-medium flex items-center text-muted-foreground">
               <InfoIcon className="h-4 w-4 mr-2" />
               Business Summary
             </div>
             <div>{selectedLog.business_summary}</div>
           </div>
           <div className="grid gap-2">
-            <div className="text-lg font-medium">
-              <PlusIcon className="h-4 w-4 mr-2" />
-              Additional Info
-            </div>
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <YoutubeIcon className="h-4 w-4" />
+                  <Star className="h-4 w-4" />
                   <h3 className="font-bold">Yelp Data</h3>
                 </div>
                 <div>

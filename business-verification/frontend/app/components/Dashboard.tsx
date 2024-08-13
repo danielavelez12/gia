@@ -195,14 +195,8 @@ export function Dashboard() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {/* <CalendarIcon className="h-4 w-4 mr-2" /> */}
-                  Timestamp
-                </TableHead>
-                <TableHead>
-                  {/* <MessageCircleIcon className="h-4 w-4 mr-2" /> */}
-                  Message
-                </TableHead>
+                <TableHead>Timestamp</TableHead>
+                <TableHead>Message</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
