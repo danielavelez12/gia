@@ -169,10 +169,13 @@ export function Dashboard() {
 
   const handleBusinessUrlChange = (e) => {
     setBusinessUrl(e.target.value);
-    // Usage
-    // summarizeEntity("https://levainbakery.com/")
-    //   .then((result) => console.log(result))
-    //   .catch((error) => console.error("Error:", error));
+  };
+
+  const submitNewBusiness = async () => {
+    console.log({ businessUrl });
+    summarizeEntity(businessUrl)
+      .then((result) => console.log(result))
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
@@ -186,7 +189,7 @@ export function Dashboard() {
               onChange={handleBusinessUrlChange}
               className="flex-1"
             />
-            <Button>
+            <Button onClick={submitNewBusiness}>
               <PlusIcon className="h-4 w-4 mr-2" />
               Add Business
             </Button>
