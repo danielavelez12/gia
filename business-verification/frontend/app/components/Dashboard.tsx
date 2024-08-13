@@ -14,8 +14,9 @@ import {
   TableBody,
   TableCell,
 } from "./ui/table";
+import { LogDetails } from "./LogDetails";
 
-interface Log {
+export interface Log {
   // Basic business information
   business_name: string;
   business_summary: string;
@@ -134,8 +135,8 @@ export function Dashboard() {
   });
   console.log({ filteredLogs });
 
-  const handleLogSelect = (log) => {
-    setSelectedLogID(log);
+  const handleLogSelect = (log: Log) => {
+    setSelectedLogID(log.id ?? "");
   };
 
   const handleFilterChange = (field, value) => {
@@ -227,57 +228,12 @@ export function Dashboard() {
       </div>
       <div className="flex-1 p-6">
         {selectedLogID ? (
-          <div className="grid gap-6">
-            <div className="grid gap-2">
-              <div className="text-2xl font-bold">
-                <MessageCircleIcon className="h-6 w-6 mr-2" />
-                {selectedLogID.message}
-              </div>
-              <div className="text-muted-foreground">
-                <CalendarIcon className="h-4 w-4 mr-2" />
-                {selectedLogID.timestamp}
-              </div>
-            </div>
-            <Separator />
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <div className="text-lg font-medium">
-                  <InfoIcon className="h-4 w-4 mr-2" />
-                  Business Summary
-                </div>
-                <div>{selectedLogID.business_summary}</div>
-              </div>
-              <div className="grid gap-2">
-                <div className="text-lg font-medium">
-                  <PlusIcon className="h-4 w-4 mr-2" />
-                  Additional Info
-                </div>
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <YoutubeIcon className="h-4 w-4" />
-                      <p>{JSON.stringify(selectedLogID.yelp_data)}</p>
-                    </div>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <MapIcon className="h-4 w-4" />
-                      <p>{JSON.stringify(selectedLogID.google_maps_data)}</p>
-                    </div>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <LinkedinIcon className="h-4 w-4" />
-                      <p>{JSON.stringify(selectedLogID.linked_in_data)}</p>
-                    </div>
-                  </CardHeader>
-                </Card>
-              </div>
-            </div>
+          <div className="flex h-screen w-full">
+            <LogDetails
+              selectedLog={
+                filteredLogs.filter((log: Log) => log.id === selectedLogID)[0]
+              }
+            />
           </div>
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground">
