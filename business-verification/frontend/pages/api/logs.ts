@@ -13,7 +13,6 @@ export default async function handler(
       const snapshot = await firestore
         .collection("kyb_logs")
         .orderBy("created_at", "desc")
-        .limit(1)
         .get();
       
       if (snapshot.empty) {
@@ -22,8 +21,11 @@ export default async function handler(
       }
 
       const doc = snapshot.docs[0];
-      const data = { id: doc.id, ...doc.data() };
-      res.status(200).json([data]);
+      const results:any[] = []
+      snapshot.forEach(doc => {
+        results.push({ id: doc.id, ...doc.data() });
+      });
+      res.status(200).json(results);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to fetch data" });

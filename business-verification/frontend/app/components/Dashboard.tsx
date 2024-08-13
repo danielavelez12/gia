@@ -16,6 +16,27 @@ import {
 } from "./ui/table";
 import { LogDetails } from "./LogDetails";
 
+async function summarizeEntity(url: string) {
+  try {
+    const response = await fetch("http://localhost:8000/new_entity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: url }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.result;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
 export interface Log {
   // Basic business information
   business_name: string;
@@ -104,9 +125,9 @@ export function Dashboard() {
     const fetchData = async () => {
       try {
         const response = await fetch("/api/logs");
-        console.log(response);
+        console.log({ response });
         const data = await response.json();
-        console.log(data);
+        console.log({ data });
         setLogs(data);
         console.log(data[0]);
       } catch (error) {
@@ -130,7 +151,7 @@ export function Dashboard() {
     return (
       (!timestamp || log.created_at.includes(timestamp)) &&
       (!message ||
-        log.business_name.toLowerCase().includes(message.toLowerCase()))
+        log.business_summary.toLowerCase().includes(message.toLowerCase()))
     );
   });
   console.log({ filteredLogs });
@@ -148,6 +169,10 @@ export function Dashboard() {
 
   const handleBusinessUrlChange = (e) => {
     setBusinessUrl(e.target.value);
+    // Usage
+    // summarizeEntity("https://levainbakery.com/")
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.error("Error:", error));
   };
 
   return (
