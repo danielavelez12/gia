@@ -5,9 +5,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Separator } from "@radix-ui/react-select";
-import { Table } from "lucide-react";
 import { Card, CardHeader } from "./ui/card";
 import {
+  Table,
   TableHeader,
   TableRow,
   TableHead,
@@ -190,81 +190,39 @@ export function Dashboard() {
             />
           </div>
         </div>
-        <div
-          style={{
-            padding: "10px",
-            height: "600px",
-            overflowY: "auto",
-          }}
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-            }}
-          >
-            <thead>
-              <tr>
-                <th
-                  style={{
-                    padding: "8px",
-                    textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
-                  <CalendarIcon className="h-4 w-4 mr-2" />
+        <div className="overflow-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {/* <CalendarIcon className="h-4 w-4 mr-2" /> */}
                   Timestamp
-                </th>
-                <th
-                  style={{
-                    padding: "8px",
-                    textAlign: "left",
-                    borderBottom: "1px solid #ddd",
-                  }}
-                >
-                  <MessageCircleIcon className="h-4 w-4 mr-2" />
+                </TableHead>
+                <TableHead>
+                  {/* <MessageCircleIcon className="h-4 w-4 mr-2" /> */}
                   Message
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {filteredLogs.length > 0 ? (
                 filteredLogs.map((log: Log, index) => (
-                  <tr
-                    key={log.id || index}
+                  <TableRow
+                    key={log.id || index} // Use index as fallback if id is missing
                     onClick={() => handleLogSelect(log)}
-                    style={{
-                      backgroundColor:
-                        selectedLogID === log.id
-                          ? "rgba(0,0,0,0.1)"
-                          : "transparent",
-                      cursor: "pointer",
-                    }}
+                    className={selectedLogID === log.id ? "bg-accent/10" : ""}
                   >
-                    <td
-                      style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
-                    >
-                      {log.created_at}
-                    </td>
-                    <td
-                      style={{ padding: "8px", borderBottom: "1px solid #ddd" }}
-                    >
-                      {log.business_name}
-                    </td>
-                  </tr>
+                    <TableCell>{log.created_at}</TableCell>
+                    <TableCell>{log.business_name}</TableCell>
+                  </TableRow>
                 ))
               ) : (
-                <tr>
-                  <td
-                    colSpan={2}
-                    style={{ padding: "8px", textAlign: "center" }}
-                  >
-                    No logs found
-                  </td>
-                </tr>
+                <TableRow>
+                  <TableCell colSpan={2}>No logs found</TableCell>
+                </TableRow>
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
       <div className="flex-1 p-6">
