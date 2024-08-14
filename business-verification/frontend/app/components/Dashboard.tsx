@@ -201,14 +201,14 @@ export function Dashboard() {
     setSelectedLogID(log.id ?? "");
   };
 
-  const handleFilterChange = (field, value) => {
+  const handleFilterChange = (field: string, value: string) => {
     setFilterOptions((prevOptions) => ({
       ...prevOptions,
       [field]: value,
     }));
   };
 
-  const handleBusinessUrlChange = (e) => {
+  const handleBusinessUrlChange = (e: any) => {
     setBusinessUrl(e.target.value);
   };
 
@@ -294,7 +294,7 @@ export function Dashboard() {
         </div>
       </div>
       <div className="flex-1 p-6">
-        {selectedLogID ? (
+        {selectedLogID && filteredLogs ? (
           <div className="flex h-screen w-full">
             <LogDetails
               selectedLog={
@@ -313,7 +313,7 @@ export function Dashboard() {
   );
 }
 
-function CalendarIcon(props) {
+function CalendarIcon(props: any) {
   return (
     <svg
       {...props}
@@ -335,7 +335,7 @@ function CalendarIcon(props) {
   );
 }
 
-function InfoIcon(props) {
+function InfoIcon(props: any) {
   return (
     <svg
       {...props}
@@ -356,7 +356,7 @@ function InfoIcon(props) {
   );
 }
 
-function MessageCircleIcon(props) {
+function MessageCircleIcon(props: any) {
   return (
     <svg
       {...props}
@@ -375,7 +375,7 @@ function MessageCircleIcon(props) {
   );
 }
 
-function PlusIcon(props) {
+function PlusIcon(props: any) {
   return (
     <svg
       {...props}

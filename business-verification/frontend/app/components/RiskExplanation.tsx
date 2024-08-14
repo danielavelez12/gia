@@ -1,10 +1,9 @@
 import React from "react";
-import { Log } from "./types"; // Assuming you have a Log type defined
 import { LowRiskBadge, HighRiskBadge, InfoBadge } from "./Badge"; // Import your badge components
+import { Log } from "./Dashboard";
 
-const RiskExplanation = (log: Log) => {
+export function RiskExplanation({ log }: { log: Log }) {
   let output = [];
-  let logBody = log.log;
 
   const ExplanationRow = ({
     badge,
@@ -19,61 +18,61 @@ const RiskExplanation = (log: Log) => {
     </div>
   );
 
-  if (logBody.log_type === "business_growth") {
+  if (log.log_type === "business_growth") {
     if (
-      logBody.old_yelp_reviews !== undefined &&
-      logBody.new_yelp_reviews !== undefined
+      log.old_yelp_reviews !== undefined &&
+      log.new_yelp_reviews !== undefined
     ) {
-      if (logBody.new_yelp_reviews > logBody.old_yelp_reviews) {
+      if (log.new_yelp_reviews > log.old_yelp_reviews) {
         output.push(
           <ExplanationRow
             key="yelp-increase"
             badge={<LowRiskBadge />}
-            explanation={`Yelp reviews increased from ${logBody.old_yelp_reviews} to ${logBody.new_yelp_reviews}`}
+            explanation={`Yelp reviews increased from ${log.old_yelp_reviews} to ${log.new_yelp_reviews}`}
           />
         );
       }
     }
 
     if (
-      logBody.old_google_reviews !== undefined &&
-      logBody.new_google_reviews !== undefined
+      log.old_google_reviews !== undefined &&
+      log.new_google_reviews !== undefined
     ) {
-      if (logBody.new_google_reviews > logBody.old_google_reviews) {
+      if (log.new_google_reviews > log.old_google_reviews) {
         output.push(
           <ExplanationRow
             key="google-increase"
             badge={<LowRiskBadge />}
-            explanation={`Google reviews increased from ${logBody.old_google_reviews} to ${logBody.new_google_reviews}`}
+            explanation={`Google reviews increased from ${log.old_google_reviews} to ${log.new_google_reviews}`}
           />
         );
       }
     }
-  } else if (logBody.log_type === "org_growth") {
+  } else if (log.log_type === "org_growth") {
     if (
-      logBody.old_company_size !== undefined &&
-      logBody.new_company_size !== undefined
+      log.old_company_size !== undefined &&
+      log.new_company_size !== undefined
     ) {
-      if (logBody.new_company_size > logBody.old_company_size) {
+      if (log.new_company_size > log.old_company_size) {
         output.push(
           <ExplanationRow
             key="company-size-increase"
             badge={<LowRiskBadge />}
-            explanation={`Company size increased from ${logBody.old_company_size} to ${logBody.new_company_size}`}
+            explanation={`Company size increased from ${log.old_company_size} to ${log.new_company_size}`}
           />
         );
-      } else if (logBody.new_company_size < logBody.old_company_size) {
+      } else if (log.new_company_size < log.old_company_size) {
         output.push(
           <ExplanationRow
             key="company-size-decrease"
             badge={<HighRiskBadge />}
-            explanation={`Company size decreased from ${logBody.old_company_size} to ${logBody.new_company_size}`}
+            explanation={`Company size decreased from ${log.old_company_size} to ${log.new_company_size}`}
           />
         );
       }
     }
   }
   return <div>{output}</div>;
-};
+}
 
 export default RiskExplanation;
