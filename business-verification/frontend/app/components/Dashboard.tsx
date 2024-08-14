@@ -15,6 +15,7 @@ import {
   TableCell,
 } from "./ui/table";
 import { LogDetails } from "./LogDetails";
+import { InfoBadge } from "./Badge";
 
 async function summarizeEntity(url: string) {
   try {
@@ -142,7 +143,7 @@ export function Dashboard() {
     fetchData();
 
     // Set up polling
-    const intervalId = setInterval(fetchData, 1000); // Adjust the interval time as needed
+    const intervalId = setInterval(fetchData, 1000000); // Adjust the interval time as needed
 
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
@@ -150,6 +151,7 @@ export function Dashboard() {
 
   const filteredLogs =
     logs &&
+    logs.length > 0 &&
     logs.filter((log: Log) => {
       const { timestamp, message } = filterOptions;
       console.log({ timestamp, message });
@@ -232,6 +234,7 @@ export function Dashboard() {
                 <TableHead>Timestamp</TableHead>
                 <TableHead>Business entity</TableHead>
                 <TableHead>Message</TableHead>
+                <TableHead>Type</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -245,6 +248,9 @@ export function Dashboard() {
                     <TableCell>{log.created_at}</TableCell>
                     <TableCell>{log.business_name}</TableCell>
                     <TableCell>New business onboarded</TableCell>
+                    <TableCell>
+                      <InfoBadge />
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -273,27 +279,6 @@ export function Dashboard() {
         )}
       </div>
     </div>
-  );
-}
-
-function BadgeAlertIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-      <line x1="12" x2="12" y1="8" y2="12" />
-      <line x1="12" x2="12.01" y1="16" y2="16" />
-    </svg>
   );
 }
 
@@ -340,48 +325,6 @@ function InfoIcon(props) {
   );
 }
 
-function LinkedinIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
-
-function MapIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" />
-      <path d="M15 5.764v15" />
-      <path d="M9 3.236v15" />
-    </svg>
-  );
-}
-
 function MessageCircleIcon(props) {
   return (
     <svg
@@ -417,26 +360,6 @@ function PlusIcon(props) {
     >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
-    </svg>
-  );
-}
-
-function YoutubeIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-      <path d="m10 15 5-3-5-3z" />
     </svg>
   );
 }
