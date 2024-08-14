@@ -95,7 +95,8 @@ export function LogDetails({ selectedLog }: LogDetailsProps) {
                   <div>
                     <p>
                       Specialties:{" "}
-                      {selectedLog.linked_in_data.specialties.join(", ")}
+                      {selectedLog.linked_in_data.specialties &&
+                        selectedLog.linked_in_data.specialties.join(", ")}
                     </p>
                     <p>
                       Website: {selectedLog.linked_in_data.website || "N/A"}

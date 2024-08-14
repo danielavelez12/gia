@@ -73,17 +73,6 @@ const RiskExplanation = (log: Log) => {
       }
     }
   }
-
-  if (output.length === 0) {
-    output.push(
-      <ExplanationRow
-        key="no-changes"
-        badge={<InfoBadge />}
-        explanation="No significant changes detected"
-      />
-    );
-  }
-
   return <div>{output}</div>;
 };
 
