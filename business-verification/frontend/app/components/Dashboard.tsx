@@ -113,22 +113,22 @@ const logTypeToLabels = (logType: string) => {
     case "new_entity":
       return {
         label: "New business onboarded",
-        badge: <InfoBadge />,
+        badge: <LowRiskBadge />,
       };
     case "org_growth":
       return {
         label: "Organization growth",
-        risk_level: <LowRiskBadge />,
+        badge: <LowRiskBadge />,
       };
     case "business_growth":
       return {
         label: "Business growth",
-        risk_level: <LowRiskBadge />,
+        badge: <LowRiskBadge />,
       };
     default:
       return {
         label: "Unknown",
-        risk_level: "Unknown",
+        badge: "Unknown",
       };
   }
 };
@@ -267,7 +267,7 @@ export function Dashboard() {
                 <TableHead>Timestamp</TableHead>
                 <TableHead>Business entity</TableHead>
                 <TableHead>Message</TableHead>
-                <TableHead>Type</TableHead>
+                <TableHead>Risk</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

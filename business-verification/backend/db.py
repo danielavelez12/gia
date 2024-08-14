@@ -50,6 +50,9 @@ def create_new_entity_log(url, name, summary, yelp_data=None, google_maps_data=N
             last_log_data = None
 
         log_type = determine_log_type(last_log_data, yelp_data, google_maps_data, linked_in_data)
+        if (log_type is None):
+            print("No significant changes detected. Skipping log creation.")
+            return None
 
     except google.api_core.exceptions.InvalidArgument as e:
         print(f"Invalid argument error: {e}")
@@ -144,7 +147,7 @@ def determine_log_type(last_log_data, yelp_data, google_maps_data, linked_in_dat
             return 'org_growth'
 
     print("No significant changes detected.")
-    return 'new_entity'
+    return None
     
 
 if __name__ == '__main__':

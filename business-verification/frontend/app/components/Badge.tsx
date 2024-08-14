@@ -9,14 +9,14 @@ const badgeStyles = {
     },
   },
   low: {
-    label: "Low Risk",
+    label: "Low",
     style: {
       backgroundColor: "#dcfce7",
       color: "#166534",
     },
   },
   high: {
-    label: "High Risk",
+    label: "High",
     style: {
       backgroundColor: "#fee2e2",
       color: "#991b1b",

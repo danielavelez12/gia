@@ -12,6 +12,8 @@ import {
   Star,
 } from "lucide-react";
 import { Log } from "./Dashboard";
+import { LowRiskBadge } from "./Badge";
+import RiskExplanation from "./RiskExplanation";
 
 interface LogDetailsProps {
   selectedLog: Log | null;
@@ -20,6 +22,7 @@ interface LogDetailsProps {
 export function LogDetails({ selectedLog }: LogDetailsProps) {
   if (!selectedLog) return null;
 
+  console.log({ selectedLog });
   return (
     <div className="flex-1 p-6">
       <div className="grid gap-6">
@@ -30,6 +33,7 @@ export function LogDetails({ selectedLog }: LogDetailsProps) {
             <span>{selectedLog.created_at}</span>
           </div>
         </div>
+        <RiskExplanation log={selectedLog} />
         <Separator />
         <div className="grid gap-4">
           <div className="grid gap-2">
