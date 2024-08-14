@@ -1,5 +1,6 @@
 import os
 import json
+import signal
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
@@ -10,8 +11,15 @@ from db import create_new_entity_log
 import re
 import time
 from tqdm import tqdm
+import concurrent
 
 load_dotenv()
+
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("LinkedIn search timed out")
 
 class EntitySummarizer:
     def __init__(self):
@@ -148,43 +156,68 @@ class EntitySummarizer:
 
     def search_linkedin_company(self, company_name):
         print(f"Searching LinkedIn for: {company_name}")
-        try:
-            with tqdm(total=5, desc="Searching LinkedIn", unit="s") as pbar:
-                start_time = time.time()
+        
+        def linkedin_search_process():
+            try:
                 search_results = self.linkedin_api.search_companies(company_name)
-                elapsed_time = time.time() - start_time
-                remaining_time = max(0, 5 - elapsed_time)
-                time.sleep(remaining_time)
-                pbar.update(5)
-            
-            if search_results:
-                company = search_results[0]
-                company_id = company['urn_id']
-                with tqdm(total=5, desc="Fetching company details", unit="s") as pbar:
-                    start_time = time.time()
+                if search_results:
+                    company = search_results[0]
+                    company_id = company['urn_id']
                     company_info = self.linkedin_api.get_company(company_id)
-                    elapsed_time = time.time() - start_time
-                    remaining_time = max(0, 5 - elapsed_time)
-                    time.sleep(remaining_time)
-                    pbar.update(5)
+                    
+                    linkedin_info = {
+                        'name': company_info.get('name'),
+                        'vanity_name': company_info.get('vanityName'),
+                        'description': company_info.get('description'),
+                        'website': company_info.get('websiteUrl'),
+                        'industry': company_info.get('companyIndustries', [{}])[0].get('localizedName'),
+                        'company_size': company_info.get('staffCountRange', {}).get('start'),
+                        'followers': company_info.get('followerCount'),
+                        'locations': [loc.get('line1') for loc in company_info.get('confirmedLocations', [])],
+                        'founded': company_info.get('foundedOn', {}).get('year'),
+                        'specialties': company_info.get('specialities', []),
+                    }
+                    return linkedin_info
+                return None
+            except Exception as e:
+                print(f"An error occurred during LinkedIn search: {str(e)}")
+                return None
+
+        try:
+            # Set up the timeout
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(15)  # Set a 15-second timeout
+
+            with tqdm(total=15, desc="Searching LinkedIn", unit="s") as pbar:
+                start_time = time.time()
+                result = linkedin_search_process()
+                elapsed_time = time.time() - start_time
                 
-                linkedin_info = {
-                    'name': company_info.get('name'),
-                    'vanity_name': company_info.get('vanityName'),
-                    'description': company_info.get('description'),
-                    'website': company_info.get('websiteUrl'),
-                    'industry': company_info.get('companyIndustries', [{}])[0].get('localizedName'),
-                    'company_size': company_info.get('staffCountRange', {}).get('start'),
-                    'followers': company_info.get('followerCount'),
-                    'locations': [loc.get('line1') for loc in company_info.get('confirmedLocations', [])],
-                    'founded': company_info.get('foundedOn', {}).get('year'),
-                    'specialties': company_info.get('specialities', []),
-                }
-                print(f"LinkedIn information found for: {linkedin_info['name']}")
-                return linkedin_info
+                # Update progress bar
+                for _ in range(int(elapsed_time)):
+                    pbar.update(1)
+                
+                # If there's remaining time, fill the progress bar
+                remaining_time = max(0, 15 - elapsed_time)
+                for _ in range(int(remaining_time)):
+                    time.sleep(1)
+                    pbar.update(1)
+
+            # Disable the alarm
+            signal.alarm(0)
+
+            if result:
+                print(f"LinkedIn information found for: {result['name']}")
+                return result
+            else:
+                print("No LinkedIn information found")
+                return None
+
+        except TimeoutException:
+            print("LinkedIn search timed out after 15 seconds")
         except Exception as e:
-            print(f"An error occurred while searching LinkedIn: {str(e)}")
-        print("No LinkedIn information found or timeout occurred")
+            print(f"An unexpected error occurred during LinkedIn search: {str(e)}")
+        
         return None
 
     def run(self, url):

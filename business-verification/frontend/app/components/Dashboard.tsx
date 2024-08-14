@@ -151,7 +151,8 @@ export function Dashboard() {
     return (
       (!timestamp || log.created_at.includes(timestamp)) &&
       (!message ||
-        log.business_summary.toLowerCase().includes(message.toLowerCase()))
+        (log.business_name &&
+          log.business_name.toLowerCase().includes(message.toLowerCase())))
     );
   });
   console.log({ filteredLogs });
@@ -224,6 +225,7 @@ export function Dashboard() {
             <TableHeader>
               <TableRow>
                 <TableHead>Timestamp</TableHead>
+                <TableHead>Business entity</TableHead>
                 <TableHead>Message</TableHead>
               </TableRow>
             </TableHeader>
@@ -237,6 +239,7 @@ export function Dashboard() {
                   >
                     <TableCell>{log.created_at}</TableCell>
                     <TableCell>{log.business_name}</TableCell>
+                    <TableCell>New business onboarded</TableCell>
                   </TableRow>
                 ))
               ) : (
