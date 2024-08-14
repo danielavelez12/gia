@@ -1,31 +1,55 @@
 import React from "react";
 
 const badgeStyles = {
-  info: { label: "Info", color: "bg-blue-100 text-blue-800" },
-  low: { label: "Low Risk", color: "bg-green-100 text-green-800" },
-  high: { label: "High Risk", color: "bg-red-100 text-red-800" },
+  info: {
+    label: "Info",
+    style: {
+      backgroundColor: "#dbeafe",
+      color: "#1e40af",
+    },
+  },
+  low: {
+    label: "Low Risk",
+    style: {
+      backgroundColor: "#dcfce7",
+      color: "#166534",
+    },
+  },
+  high: {
+    label: "High Risk",
+    style: {
+      backgroundColor: "#fee2e2",
+      color: "#991b1b",
+    },
+  },
+};
+
+const commonStyles = {
+  display: "inline-flex",
+  alignItems: "center",
+  borderRadius: "9999px",
+  paddingLeft: "0.625rem",
+  paddingRight: "0.625rem",
+  paddingTop: "0.125rem",
+  paddingBottom: "0.125rem",
+  fontSize: "0.75rem",
+  fontWeight: "500",
 };
 
 export const InfoBadge = () => (
-  <span
-    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeStyles.info.color}`}
-  >
+  <span style={{ ...commonStyles, ...badgeStyles.info.style }}>
     {badgeStyles.info.label}
   </span>
 );
 
 export const LowRiskBadge = () => (
-  <span
-    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeStyles.low.color}`}
-  >
+  <span style={{ ...commonStyles, ...badgeStyles.low.style }}>
     {badgeStyles.low.label}
   </span>
 );
 
 export const HighRiskBadge = () => (
-  <span
-    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeStyles.high.color}`}
-  >
+  <span style={{ ...commonStyles, ...badgeStyles.high.style }}>
     {badgeStyles.high.label}
   </span>
 );

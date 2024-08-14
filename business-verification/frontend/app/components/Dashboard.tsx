@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { Separator } from "@radix-ui/react-select";
-import { Card, CardHeader } from "./ui/card";
 import {
   Table,
   TableHeader,
@@ -15,7 +13,7 @@ import {
   TableCell,
 } from "./ui/table";
 import { LogDetails } from "./LogDetails";
-import { InfoBadge } from "./Badge";
+import { InfoBadge, LowRiskBadge } from "./Badge";
 
 async function summarizeEntity(url: string) {
   try {
@@ -98,7 +96,42 @@ export interface Log {
     twitter?: string;
     instagram?: string;
   };
+
+  // Business growth specific fields
+  old_yelp_reviews?: number;
+  new_yelp_reviews?: number;
+  old_google_reviews?: number;
+  new_google_reviews?: number;
+
+  // Org growth specific fields
+  old_company_size?: number | string;
+  new_company_size?: number | string;
 }
+
+const logTypeToLabels = (logType: string) => {
+  switch (logType) {
+    case "new_entity":
+      return {
+        label: "New business onboarded",
+        badge: <InfoBadge />,
+      };
+    case "org_growth":
+      return {
+        label: "Organization growth",
+        risk_level: <LowRiskBadge />,
+      };
+    case "business_growth":
+      return {
+        label: "Business growth",
+        risk_level: <LowRiskBadge />,
+      };
+    default:
+      return {
+        label: "Unknown",
+        risk_level: "Unknown",
+      };
+  }
+};
 
 export function Dashboard() {
   const [selectedLogID, setSelectedLogID] = useState("");
@@ -247,10 +280,8 @@ export function Dashboard() {
                   >
                     <TableCell>{log.created_at}</TableCell>
                     <TableCell>{log.business_name}</TableCell>
-                    <TableCell>New business onboarded</TableCell>
-                    <TableCell>
-                      <InfoBadge />
-                    </TableCell>
+                    <TableCell>{logTypeToLabels(log.log_type).label}</TableCell>
+                    <TableCell>{logTypeToLabels(log.log_type).badge}</TableCell>
                   </TableRow>
                 ))
               ) : (
