@@ -128,6 +128,9 @@ export function Dashboard() {
         console.log({ response });
         const data = await response.json();
         console.log({ data });
+        if (!data) {
+          return;
+        }
         setLogs(data);
         console.log(data[0]);
       } catch (error) {
@@ -145,16 +148,18 @@ export function Dashboard() {
     return () => clearInterval(intervalId);
   }, [dbInitialized]);
 
-  const filteredLogs = logs.filter((log: Log) => {
-    const { timestamp, message } = filterOptions;
-    console.log({ timestamp, message });
-    return (
-      (!timestamp || log.created_at.includes(timestamp)) &&
-      (!message ||
-        (log.business_name &&
-          log.business_name.toLowerCase().includes(message.toLowerCase())))
-    );
-  });
+  const filteredLogs =
+    logs &&
+    logs.filter((log: Log) => {
+      const { timestamp, message } = filterOptions;
+      console.log({ timestamp, message });
+      return (
+        (!timestamp || log.created_at.includes(timestamp)) &&
+        (!message ||
+          (log.business_name &&
+            log.business_name.toLowerCase().includes(message.toLowerCase())))
+      );
+    });
   console.log({ filteredLogs });
 
   const handleLogSelect = (log: Log) => {
@@ -230,7 +235,7 @@ export function Dashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredLogs.length > 0 ? (
+              {filteredLogs && filteredLogs.length > 0 ? (
                 filteredLogs.map((log: Log, index) => (
                   <TableRow
                     key={log.id || index} // Use index as fallback if id is missing
