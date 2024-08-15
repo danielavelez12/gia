@@ -1,0 +1,11 @@
+firebase-admin
+fastapi[standard]
+uvicorn
+pydantic
+requests
+beautifulsoup4
+python-dotenv
+anthropic
+googlemaps
+linkedin-api
+tqdm
